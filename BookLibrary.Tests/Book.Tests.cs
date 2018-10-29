@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BookLibrary;
+using NUnit.Framework;
 
 namespace BookLibrary.Tests
 {
-    public class Class1
+    [TestFixture]
+    public class BookTests
     {
         [TestCase("A", ExpectedResult = "Lev Tolstoy")]
         [TestCase("TAP", ExpectedResult = "War and Peace, Lev Tolstoy, Bookinist")]

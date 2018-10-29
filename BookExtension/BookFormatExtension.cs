@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,7 +17,8 @@ namespace BookExtension
         private string Price { get; set; }
         private string Pages { get; set; }
 
-        public BookExt(string title, string author, string year, string publishingHouse, string edition, string price, string pages)
+        public BookFormatExtension(string title, string author, string year, string publishingHouse, string edition, string price,
+            string pages)
         {
             Title = title;
             Author = author;
@@ -46,7 +48,8 @@ namespace BookExtension
                 case "t": return resStr += string.Format(provider, "{0:T}", Title);
                 case "a": return resStr += string.Format(provider, "{0:A}", Author);
                 case "ta": return resStr += string.Format(provider, "{0:T}, {1:A}", Title, Author);
-                case "tap": return resStr += string.Format(provider, "{0:T}, {1:A}, {2:P}", Title, Author, PublishingHous);
+                case "tap":
+                    return resStr += string.Format(provider, "{0:T}, {1:A}, {2:P}", Title, Author, PublishingHous);
 
                 default:
                     throw new FormatException(String.Format("The {0} format string is wrong.", format));
@@ -54,4 +57,5 @@ namespace BookExtension
 
             return resStr;
         }
+    }
 }
