@@ -9,21 +9,34 @@ namespace BookLibrary
 {
     public class Book
     {
-        public string Title { get; set; }
+        private string Title { get; set; }
         private string Author { get; set; }
-        private string Year { get; set; }
+        private int Year { get; set; }
         private string PublishingHous { get; set; }
-        private string Edition { get; set; }
-        private string Price { get; set; }
-        private string Pages { get; set; }
-
-        public Book(string title, string author, string year, string publishingHouse, string edition, string price,
-            string pages)
+        private int Edition { get; set; }
+        private decimal Price { get; set; }
+        private int Pages { get; set; }
+        public Book(string title, string author, int year, string publishingHouse, int edition, decimal price,
+            int pages)
         {
-            Title = title;
-            Author = author;
+            if (pages <= 0)
+            {
+                throw new ArgumentException(nameof(pages));
+            }
+
+            if (edition <= 0)
+            {
+                throw new ArgumentException(nameof(pages));
+            }           
+            if (year <= 0)
+            {
+                throw new ArgumentException(nameof(pages));
+            }
+           
+            Title = title ?? throw new ArgumentNullException(nameof(title));
+            Author = author ?? throw new ArgumentNullException(nameof(author));            
+            PublishingHous = publishingHouse ?? throw new ArgumentNullException(nameof(publishingHouse));
             Year = year;
-            PublishingHous = publishingHouse;
             Edition = edition;
             Price = price;
             Pages = pages;
@@ -31,17 +44,21 @@ namespace BookLibrary
 
         public string ToString(string format, IFormatProvider provider = null)
         {
+
+            if (format.Length > 4)
+            {
+                throw new ArgumentException();
+            }
             if (String.IsNullOrEmpty(format))
             {
                 format = "T";
             }
 
             string resStr = string.Empty;
-            provider = System.Globalization.CultureInfo.CurrentCulture = new CultureInfo("en-US", false);
+            provider = CultureInfo.CurrentCulture = new CultureInfo("en-US", false);
 
-            if (format.Length > 4)
-                throw new ArgumentException();
-
+            NumberFormatInfo nf = new NumberFormatInfo();
+            nf.CurrencySymbol = "$";
 
             switch (format)
             {
@@ -50,12 +67,12 @@ namespace BookLibrary
                 case "TA": return resStr += string.Format(provider, "{0:T}, {1:A}", Title, Author);
                 case "TAP":
                     return resStr += string.Format(provider, "{0:T}, {1:A}, {2:P}", Title, Author, PublishingHous);
+                case "TM":
+                    return resStr += string.Format(provider, "{0:T}, {1}", Title, Price.ToString("C",nf));
 
                 default:
                     throw new FormatException(String.Format("The {0} format string is wrong.", format));
             }
-
-            
         }
     }
 }

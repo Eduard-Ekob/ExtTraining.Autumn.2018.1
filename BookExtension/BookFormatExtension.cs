@@ -4,58 +4,28 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BookLibrary;
+
 
 namespace BookExtension
 {
-    public class BookFormatExtension
+    public static class BookFormatExtension
     {
-        public string Title { get; set; }
-        private string Author { get; set; }
-        private string Year { get; set; }
-        private string PublishingHous { get; set; }
-        private string Edition { get; set; }
-        private string Price { get; set; }
-        private string Pages { get; set; }
-
-        public BookFormatExtension(string title, string author, string year, string publishingHouse, string edition, string price,
-            string pages)
+        public static string BookExt (this Book bookExt, string format)
         {
-            Title = title;
-            Author = author;
-            Year = year;
-            PublishingHous = publishingHouse;
-            Edition = edition;
-            Price = price;
-            Pages = pages;
-        }
-
-        public string ToString(string format, IFormatProvider provider = null)
-        {
-            if (String.IsNullOrEmpty(format))
+            if (bookExt == null)
             {
-                format = "T";
+                throw new ArgumentNullException(nameof(bookExt));
             }
 
-            string resStr = string.Empty;
-            provider = CultureInfo.CurrentCulture = new CultureInfo("en-US", false);
-
-            if (format.Length > 4)
-                throw new ArgumentException();
-
-
-            switch (format.ToLowerInvariant())
+            if (format == null)
             {
-                case "t": return resStr += string.Format(provider, "{0:T}", Title);
-                case "a": return resStr += string.Format(provider, "{0:A}", Author);
-                case "ta": return resStr += string.Format(provider, "{0:T}, {1:A}", Title, Author);
-                case "tap":
-                    return resStr += string.Format(provider, "{0:T}, {1:A}, {2:P}", Title, Author, PublishingHous);
-
-                default:
-                    throw new FormatException(String.Format("The {0} format string is wrong.", format));
+                throw new ArgumentNullException(nameof(format));
             }
 
-            return resStr;
+            format = format.ToUpperInvariant();
+            IFormatProvider provider = CultureInfo.CurrentCulture = new CultureInfo("en-US", false);
+            return bookExt.ToString(format, provider);            
         }
     }
 }
