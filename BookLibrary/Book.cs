@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 
 namespace BookLibrary
 {
@@ -26,15 +23,19 @@ namespace BookLibrary
 
             if (edition <= 0)
             {
-                throw new ArgumentException(nameof(pages));
-            }           
+                throw new ArgumentException(nameof(edition));
+            }
             if (year <= 0)
             {
-                throw new ArgumentException(nameof(pages));
+                throw new ArgumentException(nameof(year));
             }
-           
+            if (price <= 0)
+            {
+                throw new ArgumentException(nameof(price));
+            }
+
             Title = title ?? throw new ArgumentNullException(nameof(title));
-            Author = author ?? throw new ArgumentNullException(nameof(author));            
+            Author = author ?? throw new ArgumentNullException(nameof(author));
             PublishingHous = publishingHouse ?? throw new ArgumentNullException(nameof(publishingHouse));
             Year = year;
             Edition = edition;
@@ -42,23 +43,24 @@ namespace BookLibrary
             Pages = pages;
         }
 
-        public string ToString(string format, IFormatProvider provider = null)
+        public string ToString(string format, IFormatProvider provider)
         {
+            if (provider == null)
+            {
+                Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
+            }
 
             if (format.Length > 4)
             {
-                throw new ArgumentException();
+                throw new ArgumentException(nameof(format));
             }
+
             if (String.IsNullOrEmpty(format))
             {
                 format = "T";
             }
 
             string resStr = string.Empty;
-            provider = CultureInfo.CurrentCulture = new CultureInfo("en-US", false);
-
-            NumberFormatInfo nf = new NumberFormatInfo();
-            nf.CurrencySymbol = "$";
 
             switch (format)
             {
@@ -68,7 +70,7 @@ namespace BookLibrary
                 case "TAP":
                     return resStr += string.Format(provider, "{0:T}, {1:A}, {2:P}", Title, Author, PublishingHous);
                 case "TM":
-                    return resStr += string.Format(provider, "{0:T}, {1}", Title, Price.ToString("C",nf));
+                    return resStr += string.Format(provider, "{0:T}, {1}", Title, Price.ToString("C"));                
 
                 default:
                     throw new FormatException(String.Format("The {0} format string is wrong.", format));

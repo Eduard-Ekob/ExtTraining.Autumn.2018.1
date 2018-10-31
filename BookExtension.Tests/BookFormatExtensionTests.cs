@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using BookLibrary;
 using NUnit.Framework;
-using BookLibrary;
-using BookExtension;
 
 namespace BookExtension.Tests
 {
